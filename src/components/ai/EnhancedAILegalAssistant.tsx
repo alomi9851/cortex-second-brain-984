@@ -14,7 +14,8 @@ import { TabFormField } from '@/components/common/TabFormField';
 import { AILegalAssistant } from '@/components/AILegalAssistant';
 
 export function EnhancedAILegalAssistant() {
-  const [activeFeature, setActiveFeature] = useState<'assistant' | 'prediction' | 'nlp'>('assistant');
+  const [activeFeature, setActiveFeature] = useState<'assistant'>('assistant');
+  const [assistantSubTab, setAssistantSubTab] = useState<'main' | 'prediction' | 'nlp' | 'tab4' | 'tab5' | 'tab6' | 'tab7'>('main');
 
   // Effet pour s'assurer que la page démarre en haut
   useEffect(() => {
@@ -98,171 +99,304 @@ export function EnhancedAILegalAssistant() {
         iconColor="text-green-600"
       />
 
-      {/* Onglets principaux - suppression de la navigation par cartes */}
+      {/* Onglet principal unique */}
       <Tabs value={activeFeature} onValueChange={(value) => setActiveFeature(value as any)} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-1">
           <TabsTrigger value="assistant" className="gap-2">
             <Bot className="w-4 h-4" />
             Assistant IA
           </TabsTrigger>
-          <TabsTrigger value="prediction" className="gap-2">
-            <TrendingUp className="w-4 h-4" />
-            Analyse Prédictive
-          </TabsTrigger>
-          <TabsTrigger value="nlp" className="gap-2">
-            <Zap className="w-4 h-4" />
-            NLP Spécialisé
-          </TabsTrigger>
         </TabsList>
 
-        {/* Contenu principal basé sur la sélection */}
+        {/* Contenu avec sous-onglets */}
         <TabsContent value="assistant" className="space-y-6">
-          {/* Champ de recherche avec reconnaissance vocale */}
-          <TabFormField
-            placeholder="Poser une question à l'assistant IA juridique..."
-            onSearch={(query) => console.log('Question IA:', query)}
-            onAdd={() => console.log('Nouvelle conversation')}
-            onFilter={() => console.log('Filtrer conversations')}
-            onSort={() => console.log('Trier conversations')}
-            onExport={() => console.log('Exporter conversation')}
-            onRefresh={() => console.log('Actualiser IA')}
-            showActions={true}
-          />
+          {/* Sous-onglets */}
+          <Tabs value={assistantSubTab} onValueChange={(value) => setAssistantSubTab(value as any)} className="w-full">
+            <TabsList className="grid w-full grid-cols-7">
+              <TabsTrigger value="main" className="gap-2">
+                <Bot className="w-4 h-4" />
+                Principal
+              </TabsTrigger>
+              <TabsTrigger value="prediction" className="gap-2">
+                <TrendingUp className="w-4 h-4" />
+                Analyse Prédictive
+              </TabsTrigger>
+              <TabsTrigger value="nlp" className="gap-2">
+                <Zap className="w-4 h-4" />
+                NLP Spécialisé
+              </TabsTrigger>
+              <TabsTrigger value="tab4" className="gap-2">
+                <Brain className="w-4 h-4" />
+                Onglet 4
+              </TabsTrigger>
+              <TabsTrigger value="tab5" className="gap-2">
+                <Target className="w-4 h-4" />
+                Onglet 5
+              </TabsTrigger>
+              <TabsTrigger value="tab6" className="gap-2">
+                <Shield className="w-4 h-4" />
+                Onglet 6
+              </TabsTrigger>
+              <TabsTrigger value="tab7" className="gap-2">
+                <Sparkles className="w-4 h-4" />
+                Onglet 7
+              </TabsTrigger>
+            </TabsList>
 
-          <AILegalAssistant />
-          
-          {/* Informations supplémentaires */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <History className="w-5 h-5" />
-                  Recherches Récentes
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {recentSearches.map((search, index) => (
-                  <div key={index} className="space-y-2">
-                    <div className="font-medium text-sm cursor-pointer hover:text-green-600">
-                      {search.query}
-                    </div>
-                    <div className="flex items-center justify-between text-xs text-gray-500">
-                      <span>{search.time}</span>
-                      <Badge variant="secondary" className="text-xs">
-                        {search.results} résultats
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+            {/* Contenu des sous-onglets */}
+            <TabsContent value="main" className="space-y-6">
+              {/* Champ de recherche avec reconnaissance vocale */}
+              <TabFormField
+                placeholder="Poser une question à l'assistant IA juridique..."
+                onSearch={(query) => console.log('Question IA:', query)}
+                onAdd={() => console.log('Nouvelle conversation')}
+                onFilter={() => console.log('Filtrer conversations')}
+                onSort={() => console.log('Trier conversations')}
+                onExport={() => console.log('Exporter conversation')}
+                onRefresh={() => console.log('Actualiser IA')}
+                showActions={true}
+              />
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Brain className="w-5 h-5" />
-                  Insights IA
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {insights.map((insight, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <div className="p-2 bg-gray-100 rounded-lg">
-                      {insight.icon}
-                    </div>
-                    <div className="space-y-1">
-                      <div className="font-medium text-sm">{insight.title}</div>
-                      <div className="text-xs text-gray-600">{insight.description}</div>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="prediction" className="space-y-6">
-          {/* Champ de recherche avec reconnaissance vocale */}
-          <TabFormField
-            placeholder="Analyser un document pour prédiction juridique..."
-            onSearch={(query) => console.log('Analyse prédictive:', query)}
-            onAdd={() => console.log('Nouvelle analyse')}
-            onFilter={() => console.log('Filtrer analyses')}
-            onSort={() => console.log('Trier analyses')}
-            onExport={() => console.log('Exporter analyse')}
-            onRefresh={() => console.log('Actualiser prédictions')}
-            showActions={true}
-          />
-
-          <Card className="border-l-4 border-l-purple-500 bg-gradient-to-r from-purple-50 to-blue-50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="w-6 h-6 text-purple-600" />
-                Analyse Prédictive Juridique
-              </CardTitle>
-              <p className="text-gray-600">
-                Algorithmes avancés d'Intelligence Artificielle pour l'analyse prédictive en droit
-              </p>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                {aiCapabilities.prediction.map((capability, index) => (
-                  <Card key={index} className="border-2 border-dashed border-purple-200 hover:border-purple-400 transition-colors">
-                    <CardContent className="pt-4">
-                      <div className="flex items-center gap-3 mb-2">
-                        {capability.icon}
-                        <h3 className="font-semibold text-sm">{capability.title}</h3>
+              <AILegalAssistant />
+              
+              {/* Informations supplémentaires */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <History className="w-5 h-5" />
+                      Recherches Récentes
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {recentSearches.map((search, index) => (
+                      <div key={index} className="space-y-2">
+                        <div className="font-medium text-sm cursor-pointer hover:text-green-600">
+                          {search.query}
+                        </div>
+                        <div className="flex items-center justify-between text-xs text-gray-500">
+                          <span>{search.time}</span>
+                          <Badge variant="secondary" className="text-xs">
+                            {search.results} résultats
+                          </Badge>
+                        </div>
                       </div>
-                      <p className="text-xs text-gray-600">{capability.description}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-          <PredictiveJuridicalAnalysis />
-        </TabsContent>
+                    ))}
+                  </CardContent>
+                </Card>
 
-        <TabsContent value="nlp" className="space-y-6">
-          {/* Champ de recherche avec reconnaissance vocale */}
-          <TabFormField
-            placeholder="Analyser un texte avec NLP juridique spécialisé..."
-            onSearch={(query) => console.log('Analyse NLP:', query)}
-            onAdd={() => console.log('Nouvelle analyse NLP')}
-            onFilter={() => console.log('Filtrer analyses NLP')}
-            onSort={() => console.log('Trier analyses NLP')}
-            onExport={() => console.log('Exporter analyse NLP')}
-            onRefresh={() => console.log('Actualiser NLP')}
-            showActions={true}
-          />
-
-          <Card className="border-l-4 border-l-blue-500 bg-gradient-to-r from-blue-50 to-green-50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Zap className="w-6 h-6 text-blue-600" />
-                NLP (Natural Language Processing) Juridique Spécialisé
-              </CardTitle>
-              <p className="text-gray-600">
-                Traitement du langage naturel spécialisé pour l'analyse automatique de textes juridiques
-              </p>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                {aiCapabilities.nlp.map((capability, index) => (
-                  <Card key={index} className="border-2 border-dashed border-blue-200 hover:border-blue-400 transition-colors">
-                    <CardContent className="pt-4">
-                      <div className="flex items-center gap-3 mb-2">
-                        {capability.icon}
-                        <h3 className="font-semibold text-sm">{capability.title}</h3>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Brain className="w-5 h-5" />
+                      Insights IA
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {insights.map((insight, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <div className="p-2 bg-gray-100 rounded-lg">
+                          {insight.icon}
+                        </div>
+                        <div className="space-y-1">
+                          <div className="font-medium text-sm">{insight.title}</div>
+                          <div className="text-xs text-gray-600">{insight.description}</div>
+                        </div>
                       </div>
-                      <p className="text-xs text-gray-600">{capability.description}</p>
-                    </CardContent>
-                  </Card>
-                ))}
+                    ))}
+                  </CardContent>
+                </Card>
               </div>
-            </CardContent>
-          </Card>
-          <SpecializedNLP />
+            </TabsContent>
+
+            <TabsContent value="prediction" className="space-y-6">
+              {/* Champ de recherche avec reconnaissance vocale */}
+              <TabFormField
+                placeholder="Analyser un document pour prédiction juridique..."
+                onSearch={(query) => console.log('Analyse prédictive:', query)}
+                onAdd={() => console.log('Nouvelle analyse')}
+                onFilter={() => console.log('Filtrer analyses')}
+                onSort={() => console.log('Trier analyses')}
+                onExport={() => console.log('Exporter analyse')}
+                onRefresh={() => console.log('Actualiser prédictions')}
+                showActions={true}
+              />
+
+              <Card className="border-l-4 border-l-purple-500 bg-gradient-to-r from-purple-50 to-blue-50">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <TrendingUp className="w-6 h-6 text-purple-600" />
+                    Analyse Prédictive Juridique
+                  </CardTitle>
+                  <p className="text-gray-600">
+                    Algorithmes avancés d'Intelligence Artificielle pour l'analyse prédictive en droit
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    {aiCapabilities.prediction.map((capability, index) => (
+                      <Card key={index} className="border-2 border-dashed border-purple-200 hover:border-purple-400 transition-colors">
+                        <CardContent className="pt-4">
+                          <div className="flex items-center gap-3 mb-2">
+                            {capability.icon}
+                            <h3 className="font-semibold text-sm">{capability.title}</h3>
+                          </div>
+                          <p className="text-xs text-gray-600">{capability.description}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+              <PredictiveJuridicalAnalysis />
+            </TabsContent>
+
+            <TabsContent value="nlp" className="space-y-6">
+              {/* Champ de recherche avec reconnaissance vocale */}
+              <TabFormField
+                placeholder="Analyser un texte avec NLP juridique spécialisé..."
+                onSearch={(query) => console.log('Analyse NLP:', query)}
+                onAdd={() => console.log('Nouvelle analyse NLP')}
+                onFilter={() => console.log('Filtrer analyses NLP')}
+                onSort={() => console.log('Trier analyses NLP')}
+                onExport={() => console.log('Exporter analyse NLP')}
+                onRefresh={() => console.log('Actualiser NLP')}
+                showActions={true}
+              />
+
+              <Card className="border-l-4 border-l-blue-500 bg-gradient-to-r from-blue-50 to-green-50">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Zap className="w-6 h-6 text-blue-600" />
+                    NLP (Natural Language Processing) Juridique Spécialisé
+                  </CardTitle>
+                  <p className="text-gray-600">
+                    Traitement du langage naturel spécialisé pour l'analyse automatique de textes juridiques
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    {aiCapabilities.nlp.map((capability, index) => (
+                      <Card key={index} className="border-2 border-dashed border-blue-200 hover:border-blue-400 transition-colors">
+                        <CardContent className="pt-4">
+                          <div className="flex items-center gap-3 mb-2">
+                            {capability.icon}
+                            <h3 className="font-semibold text-sm">{capability.title}</h3>
+                          </div>
+                          <p className="text-xs text-gray-600">{capability.description}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+              <SpecializedNLP />
+            </TabsContent>
+
+            <TabsContent value="tab4" className="space-y-6">
+              {/* Champ de recherche avec reconnaissance vocale */}
+              <TabFormField
+                placeholder="Rechercher dans l'onglet 4..."
+                onSearch={(query) => console.log('Recherche onglet 4:', query)}
+                onAdd={() => console.log('Ajouter onglet 4')}
+                onFilter={() => console.log('Filtrer onglet 4')}
+                onSort={() => console.log('Trier onglet 4')}
+                onExport={() => console.log('Exporter onglet 4')}
+                onRefresh={() => console.log('Actualiser onglet 4')}
+                showActions={true}
+              />
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Brain className="w-6 h-6 text-blue-600" />
+                    Contenu de l'Onglet 4
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">Contenu du quatrième onglet à développer selon vos besoins.</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="tab5" className="space-y-6">
+              {/* Champ de recherche avec reconnaissance vocale */}
+              <TabFormField
+                placeholder="Rechercher dans l'onglet 5..."
+                onSearch={(query) => console.log('Recherche onglet 5:', query)}
+                onAdd={() => console.log('Ajouter onglet 5')}
+                onFilter={() => console.log('Filtrer onglet 5')}
+                onSort={() => console.log('Trier onglet 5')}
+                onExport={() => console.log('Exporter onglet 5')}
+                onRefresh={() => console.log('Actualiser onglet 5')}
+                showActions={true}
+              />
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Target className="w-6 h-6 text-green-600" />
+                    Contenu de l'Onglet 5
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">Contenu du cinquième onglet à développer selon vos besoins.</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="tab6" className="space-y-6">
+              {/* Champ de recherche avec reconnaissance vocale */}
+              <TabFormField
+                placeholder="Rechercher dans l'onglet 6..."
+                onSearch={(query) => console.log('Recherche onglet 6:', query)}
+                onAdd={() => console.log('Ajouter onglet 6')}
+                onFilter={() => console.log('Filtrer onglet 6')}
+                onSort={() => console.log('Trier onglet 6')}
+                onExport={() => console.log('Exporter onglet 6')}
+                onRefresh={() => console.log('Actualiser onglet 6')}
+                showActions={true}
+              />
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="w-6 h-6 text-purple-600" />
+                    Contenu de l'Onglet 6
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">Contenu du sixième onglet à développer selon vos besoins.</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="tab7" className="space-y-6">
+              {/* Champ de recherche avec reconnaissance vocale */}
+              <TabFormField
+                placeholder="Rechercher dans l'onglet 7..."
+                onSearch={(query) => console.log('Recherche onglet 7:', query)}
+                onAdd={() => console.log('Ajouter onglet 7')}
+                onFilter={() => console.log('Filtrer onglet 7')}
+                onSort={() => console.log('Trier onglet 7')}
+                onExport={() => console.log('Exporter onglet 7')}
+                onRefresh={() => console.log('Actualiser onglet 7')}
+                showActions={true}
+              />
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Sparkles className="w-6 h-6 text-orange-600" />
+                    Contenu de l'Onglet 7
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">Contenu du septième onglet à développer selon vos besoins.</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </TabsContent>
       </Tabs>
 
@@ -313,7 +447,7 @@ export function EnhancedAILegalAssistant() {
               <p className="text-sm text-gray-700">
                 <strong>🚀 Intelligence Artificielle et Machine Learning Avancé :</strong> 
                 Toutes les fonctionnalités d'IA juridique sont maintenant intégrées et accessibles dans cette section.
-                Utilisez les onglets ci-dessus pour explorer chaque fonctionnalité en détail.
+                Utilisez les sous-onglets ci-dessus pour explorer chaque fonctionnalité en détail.
               </p>
             </div>
           </div>
