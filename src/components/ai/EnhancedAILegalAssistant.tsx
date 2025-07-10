@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -15,7 +16,7 @@ import { AILegalAssistant } from '@/components/AILegalAssistant';
 
 export function EnhancedAILegalAssistant() {
   const [activeFeature, setActiveFeature] = useState<'assistant'>('assistant');
-  const [assistantSubTab, setAssistantSubTab] = useState<'main' | 'prediction' | 'nlp' | 'tab4' | 'tab5' | 'tab6' | 'tab7'>('main');
+  const [assistantSubTab, setAssistantSubTab] = useState<'main' | 'search' | 'predictive' | 'nlp' | 'recommendations'>('main');
 
   // Effet pour s'assurer que la page démarre en haut
   useEffect(() => {
@@ -112,34 +113,26 @@ export function EnhancedAILegalAssistant() {
         <TabsContent value="assistant" className="space-y-6">
           {/* Sous-onglets */}
           <Tabs value={assistantSubTab} onValueChange={(value) => setAssistantSubTab(value as any)} className="w-full">
-            <TabsList className="grid w-full grid-cols-7">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="main" className="gap-2">
                 <Bot className="w-4 h-4" />
                 Principal
               </TabsTrigger>
-              <TabsTrigger value="prediction" className="gap-2">
+              <TabsTrigger value="search" className="gap-2">
+                <Zap className="w-4 h-4" />
+                Recherche IA
+              </TabsTrigger>
+              <TabsTrigger value="predictive" className="gap-2">
                 <TrendingUp className="w-4 h-4" />
                 Analyse Prédictive
               </TabsTrigger>
               <TabsTrigger value="nlp" className="gap-2">
-                <Zap className="w-4 h-4" />
+                <Brain className="w-4 h-4" />
                 NLP Spécialisé
               </TabsTrigger>
-              <TabsTrigger value="tab4" className="gap-2">
-                <Brain className="w-4 h-4" />
-                Onglet 4
-              </TabsTrigger>
-              <TabsTrigger value="tab5" className="gap-2">
+              <TabsTrigger value="recommendations" className="gap-2">
                 <Target className="w-4 h-4" />
-                Onglet 5
-              </TabsTrigger>
-              <TabsTrigger value="tab6" className="gap-2">
-                <Shield className="w-4 h-4" />
-                Onglet 6
-              </TabsTrigger>
-              <TabsTrigger value="tab7" className="gap-2">
-                <Sparkles className="w-4 h-4" />
-                Onglet 7
+                Recommandations
               </TabsTrigger>
             </TabsList>
 
@@ -209,7 +202,26 @@ export function EnhancedAILegalAssistant() {
               </div>
             </TabsContent>
 
-            <TabsContent value="prediction" className="space-y-6">
+            <TabsContent value="search" className="space-y-6">
+              {/* Champ de recherche avec reconnaissance vocale */}
+              <TabFormField
+                placeholder="Recherche IA avancée..."
+                onSearch={(query) => console.log('Recherche IA:', query)}
+                onAdd={() => console.log('Nouvelle recherche')}
+                onFilter={() => console.log('Filtrer recherches')}
+                onSort={() => console.log('Trier recherches')}
+                onExport={() => console.log('Exporter recherche')}
+                onRefresh={() => console.log('Actualiser recherche')}
+                showActions={true}
+              />
+
+              {/* Contenu de recherche IA */}
+              <div className="text-center py-8">
+                <p className="text-gray-600">Fonctionnalités de recherche IA avancée</p>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="predictive" className="space-y-6">
               {/* Champ de recherche avec reconnaissance vocale */}
               <TabFormField
                 placeholder="Analyser un document pour prédiction juridique..."
@@ -293,42 +305,16 @@ export function EnhancedAILegalAssistant() {
               <SpecializedNLP />
             </TabsContent>
 
-            <TabsContent value="tab4" className="space-y-6">
+            <TabsContent value="recommendations" className="space-y-6">
               {/* Champ de recherche avec reconnaissance vocale */}
               <TabFormField
-                placeholder="Rechercher dans l'onglet 4..."
-                onSearch={(query) => console.log('Recherche onglet 4:', query)}
-                onAdd={() => console.log('Ajouter onglet 4')}
-                onFilter={() => console.log('Filtrer onglet 4')}
-                onSort={() => console.log('Trier onglet 4')}
-                onExport={() => console.log('Exporter onglet 4')}
-                onRefresh={() => console.log('Actualiser onglet 4')}
-                showActions={true}
-              />
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Brain className="w-6 h-6 text-blue-600" />
-                    Contenu de l'Onglet 4
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">Contenu du quatrième onglet à développer selon vos besoins.</p>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="tab5" className="space-y-6">
-              {/* Champ de recherche avec reconnaissance vocale */}
-              <TabFormField
-                placeholder="Rechercher dans l'onglet 5..."
-                onSearch={(query) => console.log('Recherche onglet 5:', query)}
-                onAdd={() => console.log('Ajouter onglet 5')}
-                onFilter={() => console.log('Filtrer onglet 5')}
-                onSort={() => console.log('Trier onglet 5')}
-                onExport={() => console.log('Exporter onglet 5')}
-                onRefresh={() => console.log('Actualiser onglet 5')}
+                placeholder="Rechercher des recommandations..."
+                onSearch={(query) => console.log('Recherche recommandations:', query)}
+                onAdd={() => console.log('Ajouter recommandation')}
+                onFilter={() => console.log('Filtrer recommandations')}
+                onSort={() => console.log('Trier recommandations')}
+                onExport={() => console.log('Exporter recommandations')}
+                onRefresh={() => console.log('Actualiser recommandations')}
                 showActions={true}
               />
 
@@ -336,63 +322,11 @@ export function EnhancedAILegalAssistant() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Target className="w-6 h-6 text-green-600" />
-                    Contenu de l'Onglet 5
+                    Recommandations Contextuelles
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">Contenu du cinquième onglet à développer selon vos besoins.</p>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="tab6" className="space-y-6">
-              {/* Champ de recherche avec reconnaissance vocale */}
-              <TabFormField
-                placeholder="Rechercher dans l'onglet 6..."
-                onSearch={(query) => console.log('Recherche onglet 6:', query)}
-                onAdd={() => console.log('Ajouter onglet 6')}
-                onFilter={() => console.log('Filtrer onglet 6')}
-                onSort={() => console.log('Trier onglet 6')}
-                onExport={() => console.log('Exporter onglet 6')}
-                onRefresh={() => console.log('Actualiser onglet 6')}
-                showActions={true}
-              />
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Shield className="w-6 h-6 text-purple-600" />
-                    Contenu de l'Onglet 6
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">Contenu du sixième onglet à développer selon vos besoins.</p>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="tab7" className="space-y-6">
-              {/* Champ de recherche avec reconnaissance vocale */}
-              <TabFormField
-                placeholder="Rechercher dans l'onglet 7..."
-                onSearch={(query) => console.log('Recherche onglet 7:', query)}
-                onAdd={() => console.log('Ajouter onglet 7')}
-                onFilter={() => console.log('Filtrer onglet 7')}
-                onSort={() => console.log('Trier onglet 7')}
-                onExport={() => console.log('Exporter onglet 7')}
-                onRefresh={() => console.log('Actualiser onglet 7')}
-                showActions={true}
-              />
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Sparkles className="w-6 h-6 text-orange-600" />
-                    Contenu de l'Onglet 7
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">Contenu du septième onglet à développer selon vos besoins.</p>
+                  <p className="text-gray-600">Fonctionnalités de recommandations contextuelles avancées</p>
                 </CardContent>
               </Card>
             </TabsContent>
@@ -456,3 +390,4 @@ export function EnhancedAILegalAssistant() {
     </div>
   );
 }
+
