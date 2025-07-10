@@ -22,30 +22,6 @@ export function EnhancedAILegalAssistant() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  const features = [
-    {
-      id: 'assistant' as const,
-      title: 'Assistant IA Classique',
-      description: 'Recherche intelligente et suggestions contextuelles',
-      icon: Bot,
-      color: 'text-green-600'
-    },
-    {
-      id: 'prediction' as const,
-      title: 'Analyse Prédictive Juridique',
-      description: 'Prédiction d\'issues, évaluation de risques, détection d\'anomalies',
-      icon: TrendingUp,
-      color: 'text-purple-600'
-    },
-    {
-      id: 'nlp' as const,
-      title: 'NLP Juridique Spécialisé',
-      description: 'Extraction d\'entités, résumés automatiques, classification avancée',
-      icon: Zap,
-      color: 'text-blue-600'
-    }
-  ];
-
   const aiCapabilities = {
     prediction: [
       {
@@ -122,35 +98,26 @@ export function EnhancedAILegalAssistant() {
         iconColor="text-green-600"
       />
 
-      {/* Navigation des fonctionnalités avec couleurs améliorées */}
-      <div className="flex justify-center gap-4 flex-wrap">
-        {features.map((feature) => {
-          const Icon = feature.icon;
-          return (
-            <Button
-              key={feature.id}
-              variant={activeFeature === feature.id ? "default" : "outline"}
-              onClick={() => setActiveFeature(feature.id)}
-              className={`flex-col h-auto p-4 space-y-2 min-w-[200px] ${
-                activeFeature === feature.id 
-                  ? 'bg-white text-gray-900 border-gray-300 shadow-md' 
-                  : 'bg-white/90 text-gray-700 border-gray-200 hover:bg-white hover:text-gray-900 hover:border-gray-300'
-              }`}
-            >
-              <Icon className={`w-6 h-6 ${feature.color}`} />
-              <div className="text-center">
-                <div className="font-semibold text-sm">{feature.title}</div>
-                <div className="text-xs opacity-75">{feature.description}</div>
-              </div>
-            </Button>
-          );
-        })}
-      </div>
+      {/* Onglets principaux - suppression de la navigation par cartes */}
+      <Tabs value={activeFeature} onValueChange={(value) => setActiveFeature(value as any)} className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="assistant" className="gap-2">
+            <Bot className="w-4 h-4" />
+            Assistant IA
+          </TabsTrigger>
+          <TabsTrigger value="prediction" className="gap-2">
+            <TrendingUp className="w-4 h-4" />
+            Analyse Prédictive
+          </TabsTrigger>
+          <TabsTrigger value="nlp" className="gap-2">
+            <Zap className="w-4 h-4" />
+            NLP Spécialisé
+          </TabsTrigger>
+        </TabsList>
 
-      {/* Contenu principal basé sur la sélection */}
-      {activeFeature === 'assistant' && (
-        <div className="space-y-6">
-          {/* Champ de formulaire avec fonctionnalités */}
+        {/* Contenu principal basé sur la sélection */}
+        <TabsContent value="assistant" className="space-y-6">
+          {/* Champ de recherche avec reconnaissance vocale */}
           <TabFormField
             placeholder="Poser une question à l'assistant IA juridique..."
             onSearch={(query) => console.log('Question IA:', query)}
@@ -212,12 +179,10 @@ export function EnhancedAILegalAssistant() {
               </CardContent>
             </Card>
           </div>
-        </div>
-      )}
+        </TabsContent>
 
-      {activeFeature === 'prediction' && (
-        <div className="space-y-6">
-          {/* Champ de formulaire avec fonctionnalités */}
+        <TabsContent value="prediction" className="space-y-6">
+          {/* Champ de recherche avec reconnaissance vocale */}
           <TabFormField
             placeholder="Analyser un document pour prédiction juridique..."
             onSearch={(query) => console.log('Analyse prédictive:', query)}
@@ -233,7 +198,7 @@ export function EnhancedAILegalAssistant() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="w-6 h-6 text-purple-600" />
-                1.1 Analyse Prédictive Juridique
+                Analyse Prédictive Juridique
               </CardTitle>
               <p className="text-gray-600">
                 Algorithmes avancés d'Intelligence Artificielle pour l'analyse prédictive en droit
@@ -256,12 +221,10 @@ export function EnhancedAILegalAssistant() {
             </CardContent>
           </Card>
           <PredictiveJuridicalAnalysis />
-        </div>
-      )}
+        </TabsContent>
 
-      {activeFeature === 'nlp' && (
-        <div className="space-y-6">
-          {/* Champ de formulaire avec fonctionnalités */}
+        <TabsContent value="nlp" className="space-y-6">
+          {/* Champ de recherche avec reconnaissance vocale */}
           <TabFormField
             placeholder="Analyser un texte avec NLP juridique spécialisé..."
             onSearch={(query) => console.log('Analyse NLP:', query)}
@@ -277,7 +240,7 @@ export function EnhancedAILegalAssistant() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Zap className="w-6 h-6 text-blue-600" />
-                1.2 NLP (Natural Language Processing) Juridique Spécialisé
+                NLP (Natural Language Processing) Juridique Spécialisé
               </CardTitle>
               <p className="text-gray-600">
                 Traitement du langage naturel spécialisé pour l'analyse automatique de textes juridiques
@@ -300,8 +263,8 @@ export function EnhancedAILegalAssistant() {
             </CardContent>
           </Card>
           <SpecializedNLP />
-        </div>
-      )}
+        </TabsContent>
+      </Tabs>
 
       {/* Footer récapitulatif */}
       <Card className="bg-gradient-to-r from-green-50 via-blue-50 to-purple-50 border-2 border-green-200">
