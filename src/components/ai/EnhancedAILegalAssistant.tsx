@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -111,7 +110,7 @@ export function EnhancedAILegalAssistant() {
 
         {/* Contenu avec sous-onglets */}
         <TabsContent value="assistant" className="space-y-6">
-          {/* Sous-onglets */}
+          {/* Sous-onglets avec 7 onglets maintenant */}
           <Tabs value={assistantSubTab} onValueChange={(value) => setAssistantSubTab(value as any)} className="w-full">
             <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="main" className="gap-2">
@@ -390,4 +389,3 @@ export function EnhancedAILegalAssistant() {
     </div>
   );
 }
-
