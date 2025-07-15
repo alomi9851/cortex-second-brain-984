@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus, Upload, Settings, Database } from 'lucide-react';
+import { Plus, Upload, Settings } from 'lucide-react';
 
 interface ActionButtonsProps {
   resourceType?: 'ouvrage' | 'revue' | 'journal' | 'article' | 'video' | 'directory';
@@ -11,6 +11,7 @@ export function ActionButtons({ resourceType = 'ouvrage' }: ActionButtonsProps) 
   const handleAddNew = () => {
     console.log('Opening add library resource form:', resourceType);
     
+    // Déclencher l'événement directement
     const event = new CustomEvent('open-library-form', {
       detail: { resourceType }
     });
@@ -20,6 +21,7 @@ export function ActionButtons({ resourceType = 'ouvrage' }: ActionButtonsProps) 
   const handleEnrichment = () => {
     console.log('Opening enrichment with file import from library action buttons...');
     
+    // Déclencher l'événement d'import directement
     const event = new CustomEvent('open-modal', {
       detail: {
         type: 'import',
@@ -33,12 +35,9 @@ export function ActionButtons({ resourceType = 'ouvrage' }: ActionButtonsProps) 
   const handleApiConfig = () => {
     console.log('Opening API configuration for:', resourceType);
     
-    const event = new CustomEvent('open-modal', {
-      detail: {
-        type: 'api-import',
-        title: `Configuration API - ${resourceType}`,
-        data: { context: 'legal-texts', resourceType }
-      }
+    // Déclencher l'événement de configuration API
+    const event = new CustomEvent('open-api-config', {
+      detail: { resourceType }
     });
     window.dispatchEvent(event);
   };
@@ -54,7 +53,7 @@ export function ActionButtons({ resourceType = 'ouvrage' }: ActionButtonsProps) 
         Enrichir
       </Button>
       <Button variant="outline" className="gap-2 border-purple-200 text-purple-700 hover:bg-purple-50" onClick={handleApiConfig}>
-        <Database className="w-4 h-4" />
+        <Settings className="w-4 h-4" />
         API
       </Button>
     </div>

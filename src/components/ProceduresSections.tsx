@@ -7,8 +7,6 @@ import { ProcedureForm } from './ProcedureForm';
 import { ProcedureSummaryModal } from './ProcedureSummaryModal';
 import { ApprovalModal } from './ApprovalModal';
 import { ApprovalQueueModal } from './ApprovalQueueModal';
-import { ApiImportModal } from './modals/ApiImportModal';
-import { useApiModalHandler } from '@/hooks/useApiModalHandler';
 
 interface ProceduresSectionsProps {
   section: string;
@@ -21,7 +19,6 @@ export function ProceduresSections({ section, language }: ProceduresSectionsProp
   const [showApprovalModal, setShowApprovalModal] = useState(false);
   const [showApprovalQueue, setShowApprovalQueue] = useState(false);
   const [procedureData, setProcedureData] = useState(null);
-  const { showApiModal, modalContext, closeApiModal } = useApiModalHandler();
 
   const handleAddProcedure = () => {
     console.log('Fonction handleAddProcedure appelée');
@@ -68,10 +65,12 @@ export function ProceduresSections({ section, language }: ProceduresSectionsProp
 
   const handleApproveFromQueue = (item: any, comment?: string) => {
     console.log('Approuvé depuis la file:', item, comment);
+    // Ici vous pouvez ajouter la logique pour approuver l'élément
   };
 
   const handleRejectFromQueue = (item: any, reason: string) => {
     console.log('Rejeté depuis la file:', item, reason);
+    // Ici vous pouvez ajouter la logique pour rejeter l'élément
   };
 
   const handleViewFromQueue = (item: any) => {
@@ -132,12 +131,8 @@ export function ProceduresSections({ section, language }: ProceduresSectionsProp
   if (showAddForm) {
     return (
       <ProcedureForm 
-        onClose={() => setShowAddForm(false)} 
-        onSubmit={(data: any) => {
-          setProcedureData(data);
-          setShowAddForm(false);
-          setShowApprovalModal(true);
-        }}
+        onClose={handleCloseForm} 
+        onSubmit={handleProcedureSubmitted}
       />
     );
   }
@@ -153,37 +148,22 @@ export function ProceduresSections({ section, language }: ProceduresSectionsProp
       
       <ProceduresTabs 
         section={section} 
-        onAddProcedure={() => setShowAddForm(true)}
-        onOpenApprovalQueue={() => setShowApprovalQueue(true)}
+        onAddProcedure={handleAddProcedure}
+        onOpenApprovalQueue={handleOpenApprovalQueue}
       />
       
       <ProcedureSummaryModal
         isOpen={showSummaryModal}
-        onClose={() => {
-          setShowSummaryModal(false);
-          setProcedureData(null);
-        }}
-        onAddAnother={() => {
-          setShowSummaryModal(false);
-          setProcedureData(null);
-          setShowAddForm(true);
-        }}
+        onClose={handleCloseSummaryModal}
+        onAddAnother={handleAddAnotherProcedure}
         procedureData={procedureData}
       />
 
       <ApprovalModal
         isOpen={showApprovalModal}
         onClose={() => setShowApprovalModal(false)}
-        onApprove={(comment?: string) => {
-          console.log('Procédure approuvée:', procedureData, 'Commentaire:', comment);
-          setShowApprovalModal(false);
-          setShowSummaryModal(true);
-        }}
-        onReject={(reason: string) => {
-          console.log('Procédure rejetée:', procedureData, 'Raison:', reason);
-          setShowApprovalModal(false);
-          setProcedureData(null);
-        }}
+        onApprove={handleApprove}
+        onReject={handleReject}
         data={procedureData}
         type="procedure"
       />
@@ -191,28 +171,11 @@ export function ProceduresSections({ section, language }: ProceduresSectionsProp
       <ApprovalQueueModal
         isOpen={showApprovalQueue}
         onClose={() => setShowApprovalQueue(false)}
-        onApproveItem={(item: any, comment?: string) => {
-          console.log('Approuvé depuis la file:', item, comment);
-        }}
-        onRejectItem={(item: any, reason: string) => {
-          console.log('Rejeté depuis la file:', item, reason);
-        }}
-        onViewItem={(item: any) => {
-          console.log('Examen depuis la file:', item);
-          setProcedureData(item.data);
-          setShowApprovalQueue(false);
-          setShowApprovalModal(true);
-        }}
+        onApproveItem={handleApproveFromQueue}
+        onRejectItem={handleRejectFromQueue}
+        onViewItem={handleViewFromQueue}
         filterType="procedure"
       />
-
-      {showApiModal && modalContext && (
-        <ApiImportModal
-          isOpen={showApiModal}
-          onClose={closeApiModal}
-          context={modalContext.data?.context || 'procedures'}
-        />
-      )}
     </div>
   );
 }

@@ -6,8 +6,6 @@ import { LibrarySection } from "./news-references/LibrarySection";
 import { DictionariesSection } from "./news-references/DictionariesSection";
 import { DirectoriesSection } from "./news-references/DirectoriesSection";
 import { LibraryFormHandler } from './common/LibraryFormHandler';
-import { ApiImportModal } from './modals/ApiImportModal';
-import { useApiModalHandler } from '@/hooks/useApiModalHandler';
 
 interface NewsReferencesSectionsProps {
   section: string;
@@ -15,8 +13,6 @@ interface NewsReferencesSectionsProps {
 }
 
 export function NewsReferencesSections({ section, language = "fr" }: NewsReferencesSectionsProps) {
-  const { showApiModal, modalContext, closeApiModal } = useApiModalHandler();
-
   const getSectionConfig = () => {
     switch (section) {
       case "news":
@@ -74,14 +70,6 @@ export function NewsReferencesSections({ section, language = "fr" }: NewsReferen
       />
       {config.component}
       <LibraryFormHandler />
-      
-      {showApiModal && modalContext && (
-        <ApiImportModal
-          isOpen={showApiModal}
-          onClose={closeApiModal}
-          context={modalContext.data?.context || 'legal-texts'}
-        />
-      )}
     </div>
   );
 }
