@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ClipboardList } from 'lucide-react';
 import { SectionHeader } from './common/SectionHeader';
@@ -7,6 +6,8 @@ import { ProcedureForm } from './ProcedureForm';
 import { ProcedureSummaryModal } from './ProcedureSummaryModal';
 import { ApprovalModal } from './ApprovalModal';
 import { ApprovalQueueModal } from './ApprovalQueueModal';
+import { ApiImportModal } from './modals/ApiImportModal';
+import { useApiModalHandler } from '@/hooks/useApiModalHandler';
 
 interface ProceduresSectionsProps {
   section: string;
@@ -19,6 +20,7 @@ export function ProceduresSections({ section, language }: ProceduresSectionsProp
   const [showApprovalModal, setShowApprovalModal] = useState(false);
   const [showApprovalQueue, setShowApprovalQueue] = useState(false);
   const [procedureData, setProcedureData] = useState(null);
+  const { showApiModal, modalContext, closeApiModal } = useApiModalHandler();
 
   const handleAddProcedure = () => {
     console.log('Fonction handleAddProcedure appelée');
@@ -131,8 +133,12 @@ export function ProceduresSections({ section, language }: ProceduresSectionsProp
   if (showAddForm) {
     return (
       <ProcedureForm 
-        onClose={handleCloseForm} 
-        onSubmit={handleProcedureSubmitted}
+        onClose={() => setShowAddForm(false)} 
+        onSubmit={(data: any) => {
+          setProcedureData(data);
+          setShowAddForm(false);
+          setShowApprovalModal(true);
+        }}
       />
     );
   }
@@ -148,22 +154,37 @@ export function ProceduresSections({ section, language }: ProceduresSectionsProp
       
       <ProceduresTabs 
         section={section} 
-        onAddProcedure={handleAddProcedure}
-        onOpenApprovalQueue={handleOpenApprovalQueue}
+        onAddProcedure={() => setShowAddForm(true)}
+        onOpenApprovalQueue={() => setShowApprovalQueue(true)}
       />
       
       <ProcedureSummaryModal
         isOpen={showSummaryModal}
-        onClose={handleCloseSummaryModal}
-        onAddAnother={handleAddAnotherProcedure}
+        onClose={() => {
+          setShowSummaryModal(false);
+          setProcedureData(null);
+        }}
+        onAddAnother={() => {
+          setShowSummaryModal(false);
+          setProcedureData(null);
+          setShowAddForm(true);
+        }}
         procedureData={procedureData}
       />
 
       <ApprovalModal
         isOpen={showApprovalModal}
         onClose={() => setShowApprovalModal(false)}
-        onApprove={handleApprove}
-        onReject={handleReject}
+        onApprove={(comment?: string) => {
+          console.log('Procédure approuvée:', procedureData, 'Commentaire:', comment);
+          setShowApprovalModal(false);
+          setShowSummaryModal(true);
+        }}
+        onReject={(reason: string) => {
+          console.log('Procédure rejetée:', procedureData, 'Raison:', reason);
+          setShowApprovalModal(false);
+          setProcedureData(null);
+        }}
         data={procedureData}
         type="procedure"
       />
@@ -171,11 +192,76 @@ export function ProceduresSections({ section, language }: ProceduresSectionsProp
       <ApprovalQueueModal
         isOpen={showApprovalQueue}
         onClose={() => setShowApprovalQueue(false)}
-        onApproveItem={handleApproveFromQueue}
-        onRejectItem={handleRejectFromQueue}
-        onViewItem={handleViewFromQueue}
+        onApproveItem={(item: any, comment?: string) => {
+          console.log('Approuvé depuis la file:', item, comment);
+        }}
+        onRejectItem={(item: any, reason: string) => {
+          console.log('Rejeté depuis la file:', item, reason);
+        }}
+        onViewItem={(item: any) => {
+          console.log('Examen depuis la file:', item);
+          setProcedureData(item.data);
+          setShowApprovalQueue(false);
+          setShowApprovalModal(true);
+        }}
         filterType="procedure"
       />
+
+      {showApiModal && modalContext && (
+        <ApiImportModal
+          isOpen={showApiModal}
+          onClose={closeApiModal}
+          context={modalContext.data?.context || 'procedures'}
+        />
+      )}
     </div>
   );
+
+  function getSectionTitle() {
+    const titles = {
+      fr: {
+        'procedures-catalog': 'Catalogue des Procédures Administratives',
+        'procedures-enrichment': 'Alimentation de la Banque de Données',
+        'procedures-search': 'Recherche de Procédures',
+        'procedures-resources': 'Ressources Procédurales'
+      },
+      ar: {
+        'procedures-catalog': 'كتالوج الإجراءات الإدارية',
+        'procedures-enrichment': 'إثراء قاعدة البيانات',
+        'procedures-search': 'البحث في الإجراءات',
+        'procedures-resources': 'موارد الإجراءات'
+      },
+      en: {
+        'procedures-catalog': 'Administrative Procedures Catalog',
+        'procedures-enrichment': 'Database Enrichment',
+        'procedures-search': 'Procedures Search',
+        'procedures-resources': 'Procedural Resources'
+      }
+    };
+    return titles[language as keyof typeof titles]?.[section as keyof typeof titles['fr']] || 'Procédures Administratives';
+  }
+
+  function getSectionDescription() {
+    const descriptions = {
+      fr: {
+        'procedures-catalog': 'Explorez le catalogue complet des procédures administratives algériennes.',
+        'procedures-enrichment': 'Contribuez à l\'enrichissement de la base de données procédurales.',
+        'procedures-search': 'Recherchez parmi toutes les procédures administratives disponibles.',
+        'procedures-resources': 'Accédez aux ressources et outils liés aux procédures administratives.'
+      },
+      ar: {
+        'procedures-catalog': 'استكشف الكتالوج الكامل للإجراءات الإدارية الجزائرية.',
+        'procedures-enrichment': 'ساهم في إثراء قاعدة بيانات الإجراءات.',
+        'procedures-search': 'ابحث في جميع الإجراءات الإدارية المتاحة.',
+        'procedures-resources': 'اطلع على الموارد والأدوات المتعلقة بالإجراءات الإدارية.'
+      },
+      en: {
+        'procedures-catalog': 'Explore the complete catalog of Algerian administrative procedures.',
+        'procedures-enrichment': 'Contribute to enriching the procedural database.',
+        'procedures-search': 'Search through all available administrative procedures.',
+        'procedures-resources': 'Access resources and tools related to administrative procedures.'
+      }
+    };
+    return descriptions[language as keyof typeof descriptions]?.[section as keyof typeof descriptions['fr']];
+  }
 }
