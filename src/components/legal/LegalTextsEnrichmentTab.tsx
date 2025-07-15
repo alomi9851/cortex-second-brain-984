@@ -66,6 +66,18 @@ export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted }: 
     window.dispatchEvent(event);
   };
 
+  const handleApiImport = () => {
+    console.log('Opening API import for legal texts...');
+    const event = new CustomEvent('open-modal', {
+      detail: {
+        type: 'api-import',
+        title: 'Import API - Textes Juridiques',
+        data: { context: 'legal-texts' }
+      }
+    });
+    window.dispatchEvent(event);
+  };
+
   const actionsConfig = [
     {
       icon: Plus,
@@ -113,16 +125,7 @@ export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted }: 
       description: "Importer le contenu depuis des sources API configurées",
       buttonText: "Import API",
       color: "purple",
-      onClick: () => {
-        const event = new CustomEvent('open-modal', {
-          detail: {
-            type: 'api-import',
-            title: 'Import via API',
-            data: { context: 'legal-texts' }
-          }
-        });
-        window.dispatchEvent(event);
-      }
+      onClick: handleApiImport
     }
   ];
 
