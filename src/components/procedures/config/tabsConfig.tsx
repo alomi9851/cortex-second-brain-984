@@ -1,10 +1,10 @@
 
 import { useState } from 'react';
 import { Search, BookOpen, Plus, CheckSquare, FileText, Settings } from 'lucide-react';
-import { ProceduresCatalogTab } from '../tabs/ProceduresCatalogTab';
+import { ProcedureCatalogTab } from '../ProcedureCatalogTab';
 import { ProceduresEnrichmentTab } from '../tabs/ProceduresEnrichmentTab';
-import { ProceduresSearchTab } from '../tabs/ProceduresSearchTab';
-import { ProceduresResourcesTab } from '../tabs/ProceduresResourcesTab';
+import { ProceduresSearchTab } from '../ProceduresSearchTab';
+import { ProceduresResourcesTab } from '../ProceduresResourcesTab';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -33,9 +33,7 @@ export const getTabsConfig = ({
       label: 'Catalogue',
       icon: BookOpen,
       content: (
-        <ProceduresCatalogTab 
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
+        <ProcedureCatalogTab 
           onAddProcedure={onAddProcedure}
           onOpenApprovalQueue={onOpenApprovalQueue}
         />

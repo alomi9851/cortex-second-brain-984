@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { ClipboardList } from 'lucide-react';
 import { SectionHeader } from './common/SectionHeader';
@@ -67,12 +68,10 @@ export function ProceduresSections({ section, language }: ProceduresSectionsProp
 
   const handleApproveFromQueue = (item: any, comment?: string) => {
     console.log('Approuvé depuis la file:', item, comment);
-    // Ici vous pouvez ajouter la logique pour approuver l'élément
   };
 
   const handleRejectFromQueue = (item: any, reason: string) => {
     console.log('Rejeté depuis la file:', item, reason);
-    // Ici vous pouvez ajouter la logique pour rejeter l'élément
   };
 
   const handleViewFromQueue = (item: any) => {
@@ -216,52 +215,4 @@ export function ProceduresSections({ section, language }: ProceduresSectionsProp
       )}
     </div>
   );
-
-  function getSectionTitle() {
-    const titles = {
-      fr: {
-        'procedures-catalog': 'Catalogue des Procédures Administratives',
-        'procedures-enrichment': 'Alimentation de la Banque de Données',
-        'procedures-search': 'Recherche de Procédures',
-        'procedures-resources': 'Ressources Procédurales'
-      },
-      ar: {
-        'procedures-catalog': 'كتالوج الإجراءات الإدارية',
-        'procedures-enrichment': 'إثراء قاعدة البيانات',
-        'procedures-search': 'البحث في الإجراءات',
-        'procedures-resources': 'موارد الإجراءات'
-      },
-      en: {
-        'procedures-catalog': 'Administrative Procedures Catalog',
-        'procedures-enrichment': 'Database Enrichment',
-        'procedures-search': 'Procedures Search',
-        'procedures-resources': 'Procedural Resources'
-      }
-    };
-    return titles[language as keyof typeof titles]?.[section as keyof typeof titles['fr']] || 'Procédures Administratives';
-  }
-
-  function getSectionDescription() {
-    const descriptions = {
-      fr: {
-        'procedures-catalog': 'Explorez le catalogue complet des procédures administratives algériennes.',
-        'procedures-enrichment': 'Contribuez à l\'enrichissement de la base de données procédurales.',
-        'procedures-search': 'Recherchez parmi toutes les procédures administratives disponibles.',
-        'procedures-resources': 'Accédez aux ressources et outils liés aux procédures administratives.'
-      },
-      ar: {
-        'procedures-catalog': 'استكشف الكتالوج الكامل للإجراءات الإدارية الجزائرية.',
-        'procedures-enrichment': 'ساهم في إثراء قاعدة بيانات الإجراءات.',
-        'procedures-search': 'ابحث في جميع الإجراءات الإدارية المتاحة.',
-        'procedures-resources': 'اطلع على الموارد والأدوات المتعلقة بالإجراءات الإدارية.'
-      },
-      en: {
-        'procedures-catalog': 'Explore the complete catalog of Algerian administrative procedures.',
-        'procedures-enrichment': 'Contribute to enriching the procedural database.',
-        'procedures-search': 'Search through all available administrative procedures.',
-        'procedures-resources': 'Access resources and tools related to administrative procedures.'
-      }
-    };
-    return descriptions[language as keyof typeof descriptions]?.[section as keyof typeof descriptions['fr']];
-  }
 }
