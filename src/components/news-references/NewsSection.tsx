@@ -1,14 +1,11 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Newspaper, Calendar, ExternalLink, Eye, Settings, Database, Plus, Upload } from 'lucide-react';
-import { AddNewsForm } from '@/components/forms/AddNewsForm';
+import { Newspaper, Calendar, ExternalLink, Eye, Settings, Database } from 'lucide-react';
 
 export function NewsSection() {
-  const [showAddForm, setShowAddForm] = useState(false);
-
   const handleApiConfig = () => {
     console.log('Opening API configuration for news...');
     
@@ -17,24 +14,6 @@ export function NewsSection() {
         type: 'api-import',
         title: 'Configuration API - Actualités',
         data: { context: 'news' }
-      }
-    });
-    window.dispatchEvent(event);
-  };
-
-  const handleAdd = () => {
-    console.log('Opening add news form...');
-    setShowAddForm(true);
-  };
-
-  const handleEnrich = () => {
-    console.log('Opening enrichment with file import from news...');
-    
-    const event = new CustomEvent('open-modal', {
-      detail: {
-        type: 'import',
-        title: 'Importer des fichiers d\'actualités',
-        data: { acceptedTypes: ['.pdf', '.doc', '.docx', '.txt', '.csv', '.xlsx'] }
       }
     });
     window.dispatchEvent(event);
@@ -70,27 +49,10 @@ export function NewsSection() {
     }
   ];
 
-  if (showAddForm) {
-    return (
-      <AddNewsForm 
-        isOpen={showAddForm}
-        onClose={() => setShowAddForm(false)}
-      />
-    );
-  }
-
   return (
     <div className="space-y-6">
-      {/* Boutons d'action */}
-      <div className="flex justify-center gap-3 mb-6">
-        <Button className="gap-2 bg-teal-600 hover:bg-teal-700" onClick={handleAdd}>
-          <Plus className="w-4 h-4" />
-          Ajouter
-        </Button>
-        <Button variant="outline" className="gap-2 border-teal-200 text-teal-700 hover:bg-teal-50" onClick={handleEnrich}>
-          <Upload className="w-4 h-4" />
-          Enrichir
-        </Button>
+      {/* Bouton API */}
+      <div className="flex justify-center mb-6">
         <Button 
           variant="outline" 
           className="gap-2 border-purple-200 text-purple-700 hover:bg-purple-50"
