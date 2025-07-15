@@ -1,10 +1,11 @@
-
 import { useState, useEffect } from 'react';
 import { FileText } from 'lucide-react';
 import { LegalTextsTabs } from './LegalTextsTabs';
 import { LegalTextFormEnhanced } from './LegalTextFormEnhanced';
 import { useModals } from './modals/ModalManager';
 import { SectionHeader } from './common/SectionHeader';
+import { useApiModalHandler } from '@/hooks/useApiModalHandler';
+import { ApiImportModal } from './modals/ApiImportModal';
 
 interface LegalTextsSectionsProps {
   section: string;
@@ -16,6 +17,9 @@ export function LegalTextsSections({ section, language }: LegalTextsSectionsProp
   const [ocrExtractedText, setOcrExtractedText] = useState<string>('');
   const [formInputMethod, setFormInputMethod] = useState<'manual' | 'ocr'>('manual');
   const { openModal } = useModals();
+  
+  // Hook pour la modal API
+  const { showApiModal, modalContext, closeApiModal } = useApiModalHandler();
 
   // Écouter l'événement de redirection OCR
   useEffect(() => {
@@ -127,6 +131,13 @@ export function LegalTextsSections({ section, language }: LegalTextsSectionsProp
         section={section} 
         onAddLegalText={handleAddLegalText}
         onOCRTextExtracted={handleOCRTextExtracted}
+      />
+
+      {/* Modal d'import API */}
+      <ApiImportModal
+        isOpen={showApiModal}
+        onClose={closeApiModal}
+        context="legal-texts"
       />
     </div>
   );
