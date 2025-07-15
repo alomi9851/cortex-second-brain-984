@@ -1,10 +1,11 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus, Upload, Wand2, Database, Scan, Settings } from 'lucide-react';
 import { OCRScanner } from '@/components/common/OCRScanner';
 import { useGlobalActions } from '@/hooks/useGlobalActions';
+import { ApiImportModal } from '@/components/modals/ApiImportModal';
+import { useApiModalHandler } from '@/hooks/useApiModalHandler';
 
 interface LegalTextsEnrichmentTabProps {
   onAddLegalText: () => void;
@@ -14,6 +15,7 @@ interface LegalTextsEnrichmentTabProps {
 export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted }: LegalTextsEnrichmentTabProps) {
   const [showOCRScanner, setShowOCRScanner] = useState(false);
   const actions = useGlobalActions();
+  const { showApiModal, apiContext, openApiModal, closeApiModal } = useApiModalHandler();
 
   const handleOCRExtracted = (text: string) => {
     console.log('Texte OCR extrait:', text);
@@ -29,16 +31,6 @@ export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted }: 
     const event = new CustomEvent('open-legal-text-form-ocr');
     window.dispatchEvent(event);
   };
-
-  if (showOCRScanner) {
-    return (
-      <OCRScanner
-        title="Scanner un document juridique"
-        onTextExtracted={handleOCRExtracted}
-        onClose={() => setShowOCRScanner(false)}
-      />
-    );
-  }
 
   const handleImportCSVExcel = () => {
     actions.handleImport(['.csv', '.xlsx', '.xls']);
@@ -65,6 +57,20 @@ export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted }: 
     });
     window.dispatchEvent(event);
   };
+
+  const handleApiImport = () => {
+    openApiModal('legal-texts');
+  };
+
+  if (showOCRScanner) {
+    return (
+      <OCRScanner
+        title="Scanner un document juridique"
+        onTextExtracted={handleOCRExtracted}
+        onClose={() => setShowOCRScanner(false)}
+      />
+    );
+  }
 
   const actionsConfig = [
     {
@@ -113,16 +119,7 @@ export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted }: 
       description: "Importer le contenu depuis des sources API configurées",
       buttonText: "Import API",
       color: "purple",
-      onClick: () => {
-        const event = new CustomEvent('open-modal', {
-          detail: {
-            type: 'api-import',
-            title: 'Import via API',
-            data: { context: 'legal-texts' }
-          }
-        });
-        window.dispatchEvent(event);
-      }
+      onClick: handleApiImport
     }
   ];
 
@@ -202,6 +199,12 @@ export function LegalTextsEnrichmentTab({ onAddLegalText, onOCRTextExtracted }: 
           ))}
         </div>
       </div>
+
+      <ApiImportModal
+        isOpen={showApiModal}
+        onClose={closeApiModal}
+        context={apiContext}
+      />
     </div>
   );
 }

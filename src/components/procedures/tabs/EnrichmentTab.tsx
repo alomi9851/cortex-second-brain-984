@@ -1,11 +1,12 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plus, Upload, Wand2, Database, Scan } from 'lucide-react';
+import { Plus, Upload, Wand2, Database, Scan, Settings } from 'lucide-react';
 import { OCRScanner } from '@/components/common/OCRScanner';
 import { useAIAutoFill } from '@/hooks/useAIAutoFill';
 import { AIAutoFillModal } from '@/components/ai/AIAutoFillModal';
+import { ApiImportModal } from '@/components/modals/ApiImportModal';
+import { useApiModalHandler } from '@/hooks/useApiModalHandler';
 
 interface EnrichmentTabProps {
   onAddProcedure: () => void;
@@ -15,6 +16,7 @@ interface EnrichmentTabProps {
 export function EnrichmentTab({ onAddProcedure, onOCRTextExtracted }: EnrichmentTabProps) {
   const [showOCRScanner, setShowOCRScanner] = useState(false);
   const { isModalOpen, context, openModal, closeModal, handleDataGenerated } = useAIAutoFill();
+  const { showApiModal, apiContext, openApiModal, closeApiModal } = useApiModalHandler();
 
   const handleOCRExtracted = (text: string) => {
     console.log('Texte OCR extrait pour procédure:', text);
@@ -71,6 +73,10 @@ export function EnrichmentTab({ onAddProcedure, onOCRTextExtracted }: Enrichment
     window.dispatchEvent(event);
   };
 
+  const handleApiImport = () => {
+    openApiModal('procedures');
+  };
+
   return (
     <div className="space-y-8">
       {/* Section principale avec les 2 choix principaux */}
@@ -123,7 +129,7 @@ export function EnrichmentTab({ onAddProcedure, onOCRTextExtracted }: Enrichment
       {/* Autres options d'enrichissement */}
       <div>
         <h3 className="text-xl font-semibold text-gray-900 mb-6">Options d'enrichissement avancées</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card className="hover:shadow-md transition-shadow cursor-pointer border-gray-200" onClick={handleImportCSVExcel}>
             <CardHeader className="text-center">
               <Upload className="w-12 h-12 mx-auto text-blue-600 mb-4" />
@@ -183,6 +189,26 @@ export function EnrichmentTab({ onAddProcedure, onOCRTextExtracted }: Enrichment
               </Button>
             </CardContent>
           </Card>
+
+          <Card className="hover:shadow-md transition-shadow cursor-pointer border-gray-200" onClick={handleApiImport}>
+            <CardHeader className="text-center">
+              <Settings className="w-12 h-12 mx-auto text-indigo-600 mb-4" />
+              <CardTitle className="text-lg">Import API</CardTitle>
+              <CardDescription>
+                Importer le contenu depuis des sources API configurées
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button 
+                variant="outline"
+                className="w-full border-indigo-300 text-indigo-700 hover:bg-indigo-50" 
+                onClick={handleApiImport}
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                Import API
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
@@ -191,6 +217,12 @@ export function EnrichmentTab({ onAddProcedure, onOCRTextExtracted }: Enrichment
         onClose={closeModal}
         context={context}
         onDataGenerated={handleDataGenerated}
+      />
+
+      <ApiImportModal
+        isOpen={showApiModal}
+        onClose={closeApiModal}
+        context={apiContext}
       />
     </div>
   );

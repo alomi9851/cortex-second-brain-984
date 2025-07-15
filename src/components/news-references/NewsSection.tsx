@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,10 +7,13 @@ import { TabFormField } from '@/components/common/TabFormField';
 import { Newspaper, Calendar, TrendingUp, Users, FileText, Settings } from 'lucide-react';
 import { AddNewsForm } from '@/components/forms/AddNewsForm';
 import { useGlobalActions } from '@/hooks/useGlobalActions';
+import { ApiImportModal } from '@/components/modals/ApiImportModal';
+import { useApiModalHandler } from '@/hooks/useApiModalHandler';
 
 export function NewsSection() {
   const [showAddForm, setShowAddForm] = useState(false);
   const actions = useGlobalActions();
+  const { showApiModal, apiContext, openApiModal, closeApiModal } = useApiModalHandler();
 
   const handleAdd = () => {
     console.log('Opening add news form...');
@@ -19,6 +23,10 @@ export function NewsSection() {
   const handleEnrich = () => {
     console.log('Opening enrichment with file import...');
     actions.handleImport(['.pdf', '.doc', '.docx', '.txt']);
+  };
+
+  const handleApiConfig = () => {
+    openApiModal('news');
   };
 
   const handleCloseForm = () => {
@@ -64,7 +72,7 @@ export function NewsSection() {
               <FileText className="w-4 h-4" />
               Enrichir
             </Button>
-            <Button variant="outline" className="gap-2 border-purple-200 text-purple-700 hover:bg-purple-50" onClick={() => console.log('API configuration for Actualités Récentes')}>
+            <Button variant="outline" className="gap-2 border-purple-200 text-purple-700 hover:bg-purple-50" onClick={handleApiConfig}>
               <Settings className="w-4 h-4" />
               API
             </Button>
@@ -363,6 +371,12 @@ export function NewsSection() {
           </div>
         </TabsContent>
       </Tabs>
+
+      <ApiImportModal
+        isOpen={showApiModal}
+        onClose={closeApiModal}
+        context={apiContext}
+      />
     </div>
   );
 }
